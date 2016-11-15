@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=is 8">
+		<title>First Canvas</title>
+		<style type="text/css">
+			canvas {
+				border: dotted 1px black;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function(){
+			// draw lines of varying widths
+				var theCanvas = document.getElementById('Canvas1');
+				if (theCanvas && theCanvas.getContext) {
+					var ctx = theCanvas.getContext("2d");
+					if (ctx) {
+						for (var i = 0; i < 10; i++){
+							ctx.beginPath();
+							ctx.lineWidth = i+1;
+							ctx.moveTo(25, 25+i*15);
+							ctx.lineTo(475, 25+i*15);
+							ctx.stroke();
+							
+						ctx.strokeStyle = "green";
+						ctx.fillStyle = "red";
+						ctx.lineWidth = 5;
+						
+						// stroke and fill a circle
+						ctx.beginPath();
+						ctx.arc(350,150,100,0,2*Math.PI);
+						ctx.fill();
+						ctx.stroke(); 
+						
+						// stroke a quarter arc
+						ctx.beginPath();
+						ctx.arc(40,150,100,1.5*Math.PI,2*Math.PI);
+						ctx.stroke(); 
+						
+						// stroke a three-quarter arc, going anti-clockwise
+						ctx.beginPath();
+						ctx.arc(250,150,100,0,1.5*Math.PI,false);
+						ctx.stroke(); 
+
+
+						}						
+					}
+				}
+				
+			// radial gradient
+				var theCanvas = document.getElementById('Canvas2');
+				if (theCanvas && theCanvas.getContext) {
+					var ctx = theCanvas.getContext("2d");
+					if (ctx) {
+						// create a radial gradient
+						var radGrd = ctx.createRadialGradient(525,150,20,525,100,100);
+						radGrd.addColorStop(0, "#ff0"); 
+						// start with red at 0
+						radGrd.addColorStop(0.5, "#ff8"); // put blue at the halfway point
+						radGrd.addColorStop(1,"#0f0"); // finish with green
+						ctx.fillStyle = radGrd;
+						
+						ctx.beginPath();
+						ctx.arc(525,150,100,0,2*Math.PI);
+						ctx.stroke();
+						ctx.fill();
+						
+						//rotate transfomation
+						ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
+						var radian=(Math.PI / 180) * 20;
+						for (var degrees = 0; degrees < 360; degrees += 20) {
+							ctx.rotate(radian);
+							ctx.beginPath();
+							ctx.moveTo(-100,0);
+							ctx.lineTo(100,0);
+							ctx.stroke();
+						}
+					}
+				}
+			
+			
+			// animation
+				var theCanvas = document.getElementById('Canvas3');
+				if (theCanvas && theCanvas.getContext) {
+					var ctx = theCanvas.getContext("2d");
+					if (ctx) {
+						var imagePaths = [
+				"images/salsa.jpg", "images/gazpachodip.jpe", "images/tomatocluster.jpe", "images/tomatologo.jpe"
+			];
+			var Canvas3 = null;
+			var Canvas3Ctx = null;
+			var img = document.createElement("img");
+			var currentImage = 0;
+			var revealTimer;
+
+			window.onload = function () {
+				Canvas3 = document.getElementById('Canvas3');
+				Canvas3Ctx = Canvas3.getContext('2d');
+				
+				img.setAttribute('width','600');
+				img.setAttribute('height','400');
+				switchImage();
+				
+				// start the animation
+				setInterval(switchImage,3000);
+			}
+			
+			function switchImage() {
+				img.setAttribute('src',imagePaths[currentImage++]);
+				if (currentImage >= imagePaths.length)
+					currentImage = 0;
+				
+				Canvas3Ctx.globalAlpha = 0.1;
+				revealTimer = setInterval(revealImage,100);
+			}
+			
+			function revealImage() {
+				Canvas3Ctx.save();
+				Canvas3Ctx.drawImage(img,0,0,600,400);
+				Canvas3Ctx.globalAlpha += 0.1;
+				if (Canvas3Ctx.globalAlpha >= 1.0)
+					clearInterval(revealTimer);
+				Canvas3Ctx.restore();
+			}
+				}		
+			}
+		}
+			
+		</script>
+		
+	</head>
+	<body>
+		<h1>First Canvas</h1>
+		<p>Basic Drawing</p>
+		<canvas id="Canvas1" width="700" height="300">Your browser does not support canvas.</canvas>
+		<p>Gradients and Transformations</p>
+		<canvas id="Canvas2" width="700" height="300">Your browser does not support canvas.</canvas>
+		<p>Animation or Interactive</p>
+		<canvas id="showCanvas" width="600" height="400">Your browser does not support canvas.</canvas>
+		
+
+	</body>
+</html>
